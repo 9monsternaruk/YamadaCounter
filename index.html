@@ -1,0 +1,917 @@
+!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yamada Security App</title>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Noto+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body { 
+      background-color: #121212; 
+      color: #E0E0E0; 
+      font-family: 'Poppins', 'Noto Sans Thai', sans-serif; 
+      user-select: none; 
+      padding-bottom: 40px; 
+    }
+    .container-app { max-width: 600px; margin: auto; padding: 15px; }
+    
+    #login-page { height: 100vh; display: flex; align-items: center; justify-content: center; background-color: #121212; }
+    .login-box { 
+      background-color: #1E1E1E; 
+      padding: 40px 30px; 
+      border-radius: 16px; 
+      border: 1px solid #2C2C2C; 
+      width: 90%; 
+      max-width: 400px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      transform: translateY(-15vh); 
+    }
+    .login-box h4 { font-family: 'Poppins', sans-serif; color: #FFD700 !important; }
+    
+    .form-control-dark { 
+      background-color: #121212; 
+      border: 1px solid #333; 
+      color: #E0E0E0; 
+      border-radius: 8px;
+      padding: 12px 15px;
+    }
+    .form-control-dark:focus { 
+      background-color: #1A1A1A; 
+      color: #FFF; 
+      border-color: #FFD700; 
+      box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.15); 
+    }
+    .form-control-dark::placeholder { color: #888; font-size: 0.9rem; }
+    
+    .app-navbar { 
+      background-color: #1E1E1E; 
+      border-bottom: 1px solid #2C2C2C; 
+      padding: 12px 15px; 
+      margin-bottom: 25px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      border-radius: 0 0 16px 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .nav-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+    .nav-buttons .btn { font-size: 0.85rem; padding: 6px 12px; border-radius: 8px; }
+    .btn-warning { background-color: #FFD700; color: #121212; border: none; }
+    .btn-warning:hover { background-color: #F4C400; color: #121212; }
+    .btn-outline-warning { color: #FFD700; border-color: #FFD700; }
+    .btn-outline-warning:hover { background-color: rgba(255, 215, 0, 0.1); color: #FFD700; }
+
+    .page-title { font-family: 'Poppins', sans-serif; letter-spacing: 1px; color: #FFF; }
+    .date-text { color: #BDBDBD; font-size: 0.9rem; margin-bottom: 25px; }
+    
+    .counter-card { 
+      background-color: #1E1E1E; 
+      border-radius: 20px; 
+      padding: 25px 15px 20px 15px; 
+      margin-bottom: 20px; 
+      border: 1px solid #2C2C2C; 
+      text-align: center; 
+      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+    }
+    
+    .modern-icon svg { width: 50px; height: 50px; margin-bottom: 15px; }
+    .count-display { font-size: 4rem; font-weight: 700; color: #FFF; line-height: 1; margin-bottom: 25px; font-family: 'Poppins', sans-serif;}
+    
+    .btn-counter { 
+      width: 100%; 
+      height: 80px; 
+      font-size: 3rem; 
+      border-radius: 16px; 
+      border: none; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      color: #FFF;
+      margin-bottom: 15px;
+      transition: transform 0.1s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .btn-counter:active { transform: scale(0.94); box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+    
+    .btn-car { background-color: #2196F3; }
+    .btn-car:hover { background-color: #1E88E5; }
+    .btn-people { background-color: #4CAF50; }
+    .btn-people:hover { background-color: #43A047; }
+    
+    .label-car { color: #2196F3; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;}
+    .label-people { color: #4CAF50; font-size: 1rem; font-weight: 600; letter-spacing: 0.5px;}
+    
+    .time-slot-badge { 
+      font-size: 1rem; 
+      background-color: #333; 
+      color: #E0E0E0; 
+      padding: 6px 20px; 
+      border-radius: 30px; 
+      font-weight: 500; 
+      border: 1px solid #444;
+    }
+    .badge-test { background-color: #F44336 !important; color: white !important; border-color: #D32F2F !important;}
+    
+    .btn-save { 
+      background-color: #424242; 
+      color: #E0E0E0; 
+      border-radius: 12px; 
+      border: none; 
+      font-weight: 600; 
+      font-size: 1.1rem; 
+      transition: 0.2s; 
+    }
+    .btn-save.active-save { background-color: #FFD700; color: #121212; }
+    .btn-save:active { transform: scale(0.98); }
+    
+    .table-responsive { background: #1E1E1E; border-radius: 16px; border: 1px solid #2C2C2C; padding: 5px; overflow: hidden; }
+    .table-yamada { margin-bottom: 0; color: #E0E0E0; width: 100%; }
+    .table-yamada thead { background-color: #2C2C2C; }
+    .table-yamada thead th { 
+      border-bottom: none !important; 
+      color: #E0E0E0 !important; 
+      font-weight: 600; 
+      font-size: 0.95rem;
+      padding: 12px 10px;
+      background-color: transparent !important;
+    }
+    .table-yamada td { 
+      border-bottom: 1px solid #2C2C2C !important; 
+      padding: 12px 10px; 
+      color: #E0E0E0 !important; 
+      background-color: transparent !important;
+    }
+    .table-yamada tbody tr:last-child td { border-bottom: none !important; }
+    .table-yamada tfoot { background-color: #252525; }
+    .table-yamada tfoot td { 
+      border-top: none !important; 
+      color: #FFF !important; 
+      font-weight: 700; 
+    }
+    
+    #status-msg { font-size: 0.9rem; font-weight: 500; min-height: 1.5em; margin-top: 8px; }
+
+    .header-box { background-color: transparent; padding: 0 5px; margin-bottom: 20px; }
+    .status-badge { background-color: rgba(255, 215, 0, 0.15); color: #FFD700; font-size: 0.7rem; padding: 4px 10px; border-radius: 20px; font-weight: 600; margin-left: 10px; border: 1px solid rgba(255,215,0,0.3);}
+    
+    .search-box { background-color: #1E1E1E; border: 1px solid #2C2C2C; border-radius: 16px; padding: 15px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);}
+    
+    .form-select-dark { 
+      background-color: #121212; 
+      border: 1px solid #333; 
+      color: #E0E0E0; 
+      border-radius: 8px; 
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23BDBDBD' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    }
+    .form-select-dark:focus {
+      background-color: #1A1A1A; 
+      color: #FFF; 
+      border-color: #FFD700; 
+      box-shadow: 0 0 0 0.2rem rgba(255, 215, 0, 0.15); 
+    }
+    
+    ::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; }
+    
+    .card-dark { 
+      background-color: #1E1E1E; 
+      border: 1px solid #2C2C2C; 
+      border-radius: 16px; 
+      padding: 20px 15px; 
+      height: 100%; 
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .card-title-sm { font-size: 0.8rem; color: #888; margin-bottom: 10px; font-weight: 500;}
+    .unit-text { font-size: 0.75rem; color: #666; margin-top: 2px; }
+    .text-val-car { color: #2196F3; font-size: 2.5rem; font-weight: 700; line-height: 1; font-family: 'Poppins', sans-serif;}
+    .text-val-people { color: #4CAF50; font-size: 2.5rem; font-weight: 700; line-height: 1; font-family: 'Poppins', sans-serif;}
+    .text-val-total { color: #E0E0E0; font-size: 2rem; font-weight: 600; line-height: 1; font-family: 'Poppins', sans-serif;}
+    
+    .chart-container { background-color: #1E1E1E; border: 1px solid #2C2C2C; border-radius: 16px; padding: 20px; margin-top: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);}
+    .loading-text { text-align: center; color: #FFD700; font-weight: 500; margin: 30px 0; font-size: 0.9rem;}
+    
+    .export-box { background-color: #1E1E1E; border-radius: 16px; padding: 30px 20px; border: 1px solid #2C2C2C; text-align: center; margin-top: 20px;}
+
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s ease;
+    }
+    .modal-overlay.show { opacity: 1; pointer-events: auto; }
+    .modal-content-dark {
+      background: #1E1E1E; border: 1px solid #2C2C2C; border-radius: 16px;
+      padding: 25px; width: 90%; max-width: 400px;
+      transform: translateY(20px); transition: 0.3s ease; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .modal-overlay.show .modal-content-dark { transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <div class="modal-overlay" id="backdateModal">
+    <div class="modal-content-dark">
+      <h5 class="fw-bold text-warning mb-3">⏳ บันทึกข้อมูลย้อนหลัง</h5>
+      <p class="small text-secondary mb-4">ฟังก์ชันเฉพาะผู้ดูแลระบบ สำหรับคีย์ข้อมูลแทนกระดาษ</p>
+      
+      <label class="form-label text-white small">เลือกวันที่</label>
+      <input type="date" id="bd-date" class="form-control form-control-dark mb-3">
+      
+      <label class="form-label text-white small">เลือกช่วงเวลา</label>
+      <select id="bd-time" class="form-select form-select-dark mb-3">
+        <option value="11:00-12:00">11:00-12:00</option>
+        <option value="12:00-13:00">12:00-13:00</option>
+        <option value="13:00-14:00">13:00-14:00</option>
+        <option value="14:00-15:00">14:00-15:00</option>
+        <option value="15:00-16:00">15:00-16:00</option>
+        <option value="16:00-17:00">16:00-17:00</option>
+        <option value="17:00-18:00">17:00-18:00</option>
+        <option value="18:00-19:00">18:00-19:00</option>
+        <option value="19:00-20:00">19:00-20:00</option>
+        <option value="20:00-21:00">20:00-21:00</option>
+        <option value="21:00-22:00">21:00-22:00</option>
+      </select>
+
+      <div class="row g-2 mb-4">
+        <div class="col-6">
+          <label class="form-label text-white small">รถ (คัน)</label>
+          <input type="number" id="bd-car" class="form-control form-control-dark text-center" value="0" min="0">
+        </div>
+        <div class="col-6">
+          <label class="form-label text-white small">คน (คน)</label>
+          <input type="number" id="bd-people" class="form-control form-control-dark text-center" value="0" min="0">
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button class="btn btn-secondary w-50 fw-bold rounded-3" onclick="closeBackdateModal()">ยกเลิก</button>
+        <button class="btn btn-warning w-50 fw-bold rounded-3" id="btnSubmitBackdate" onclick="submitBackdate()">บันทึกข้อมูล</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="login-page">
+    <div class="login-box text-center">
+      <h4 class="fw-bold mb-4" style="letter-spacing: 2px;">LOGIN</h4>
+      <input type="text" id="loginUsername" class="form-control form-control-dark mb-3" placeholder="รหัสผู้ใช้งาน / เบอร์โทร">
+      <input type="password" id="loginPassword" class="form-control form-control-dark mb-4" placeholder="รหัสผ่าน (PIN)">
+      <button class="btn btn-warning w-100 fw-bold py-2 rounded-3" id="btnLogin" onclick="processLogin()">เข้าสู่ระบบ</button>
+      <div id="loginAlert" class="text-danger mt-3" style="font-size: 0.85rem; display: none;"></div>
+    </div>
+  </div>
+
+  <div id="app-page" style="display: none;">
+    <div class="container-app p-0">
+      
+      <div class="app-navbar">
+        <div class="nav-buttons">
+          <button id="btnNavCounter" class="btn btn-warning fw-bold" onclick="switchPage('counter')">หน้าหลัก</button>
+          <button id="btnNavDashboard" class="btn btn-outline-warning fw-bold" onclick="switchPage('dashboard')">แดชบอร์ด</button>
+          <button id="btnNavExport" class="btn btn-outline-warning fw-bold admin-only" style="display:none;" onclick="switchPage('export')">ส่งรายงาน</button>
+        </div>
+        
+        <div class="user-info d-flex align-items-center justify-content-end">
+          <div class="d-flex flex-column align-items-end me-2">
+            <span id="displayUser" class="fw-bold mb-1" style="color: #FFD700; font-size: 0.9rem; line-height: 1;">User</span>
+            <div class="admin-only" style="display: none;">
+              <div class="form-check form-switch m-0 p-0 d-flex justify-content-end" style="min-height: auto;">
+                <input class="form-check-input m-0 float-none" type="checkbox" id="testModeSwitch" onchange="toggleTestMode()" style="width: 1.8rem; height: 0.9rem; cursor: pointer; box-shadow: none; border-color: #555; background-color: #333;">
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-danger px-2 rounded-3" onclick="processLogout()" style="background-color: #F44336; border: none; height: 30px; font-weight: 600;">ออก</button>
+        </div>
+      </div>
+
+      <div id="page-counter" class="container-app pt-0">
+        <div class="text-center">
+          <h2 class="fw-bold mb-1 page-title">Yamada</h2>
+          <p id="current-date" class="date-text"></p>
+          
+          <div class="mb-4">
+            <span id="current-slot" class="time-slot-badge">กำลังโหลดข้อมูล...</span>
+          </div>
+
+          <div class="row g-3 mb-4 mt-2">
+            <div class="col-6">
+              <div class="counter-card">
+                <div class="modern-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2196F3">
+                    <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.08 3.11H5.77L6.85 7zM7.5 16c-.83 0-1.5-.67-1.5-1.5S6.67 13 7.5 13s1.5.67 1.5 1.5S8.33 16 7.5 16zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                  </svg>
+                </div>
+                <div id="car-count" class="count-display">0</div>
+                <button class="btn btn-car btn-counter" onclick="addCount('car')">+</button>
+                <div class="label-car">จำนวนรถ</div>
+              </div>
+            </div>
+            
+            <div class="col-6">
+              <div class="counter-card">
+                <div class="modern-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#4CAF50">
+                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                  </svg>
+                </div>
+                <div id="person-count" class="count-display">0</div>
+                <button class="btn btn-people btn-counter" onclick="addCount('person')">+</button>
+                <div class="label-people">จำนวนคน</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-grid gap-2 mb-4">
+            <button id="save-btn" class="btn btn-save btn-lg py-3 shadow-sm" onclick="saveData()">💾 บันทึกข้อมูลปัจจุบัน</button>
+            <div id="status-msg"></div>
+          </div>
+
+          <div class="table-responsive shadow-sm">
+            <table class="table table-yamada align-middle text-center">
+              <thead>
+                <tr>
+                  <th style="width: 40%;">ช่วงเวลา</th>
+                  <th style="width: 30%;">รถ</th>
+                  <th style="width: 30%;">คน</th>
+                </tr>
+              </thead>
+              <tbody id="summary-body" style="font-weight: 500;"></tbody>
+              <tfoot>
+                <tr>
+                  <td class="py-3">รวมยอดวัน</td>
+                  <td id="total-cars" class="py-3" style="color: #2196F3 !important; font-size: 1.1rem;">0</td>
+                  <td id="total-people" class="py-3" style="color: #4CAF50 !important; font-size: 1.1rem;">0</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+
+          <div class="d-grid mt-4 mb-2">
+            <button class="btn py-2 rounded-3 fw-bold" style="background-color: #2C2C2C; color: #BDBDBD; border: 1px solid #444;" onclick="copyDailySummary()">📋 คัดลอกสรุปส่งรายงาน</button>
+            
+            <button class="btn py-2 rounded-3 fw-bold admin-only mt-2" style="background-color: rgba(255,215,0,0.1); color: #FFD700; border: 1px dashed #FFD700; display: none;" onclick="openBackdateModal()">⏳ คีย์ข้อมูลย้อนหลัง (Admin)</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-dashboard" class="container-app pt-0" style="display: none;">
+        <div class="header-box">
+          <div class="d-flex align-items-center">
+            <h4 class="mb-0 fw-bold page-title" style="color: #E0E0E0;">รายงาน Yamada</h4>
+            <span class="status-badge">Real-time</span>
+          </div>
+        </div>
+
+        <div class="search-box">
+          <div class="row g-2 align-items-stretch">
+            <div class="col-4">
+              <select id="filterType" class="form-select form-select-dark text-sm h-100" onchange="toggleInput()">
+                <option value="daily">รายวัน</option>
+                <option value="weekly">รายสัปดาห์</option>
+                <option value="monthly">รายเดือน</option>
+                <option value="all">ดูทั้งหมด</option>
+              </select>
+            </div>
+            <div class="col-5">
+              <input type="date" id="inputDaily" class="form-control form-control-dark h-100">
+              <input type="week" id="inputWeekly" class="form-control form-control-dark h-100" style="display:none;">
+              <input type="month" id="inputMonthly" class="form-control form-control-dark h-100" style="display:none;">
+              <input type="text" id="inputAll" class="form-control form-control-dark text-center h-100" value="ทุกช่วงเวลา" disabled style="display:none;">
+            </div>
+            <div class="col-3">
+              <button class="btn btn-warning w-100 fw-bold h-100 px-1 rounded-3" onclick="executeSearch()">ค้นหา</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="loading" class="loading-text" style="display:none;">กำลังโหลดข้อมูล... ⏳</div>
+
+        <div id="dashboard-content">
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="card-dark">
+                <div class="card-title-sm" id="title-car-search">ยอดรถ (รายวัน)</div>
+                <div id="search-cars" class="text-val-car">0</div>
+                <div class="unit-text">คัน</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="card-dark">
+                <div class="card-title-sm" id="title-people-search">ยอดคน (รายวัน)</div>
+                <div id="search-people" class="text-val-people">0</div>
+                <div class="unit-text">คน</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="card-dark">
+                <div class="card-title-sm">รวมทั้งระบบ (รถ)</div>
+                <div id="total-cars-system" class="text-val-total">0</div>
+                <div class="unit-text">คัน</div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="card-dark">
+                <div class="card-title-sm">รวมทั้งระบบ (คน)</div>
+                <div id="total-people-system" class="text-val-total">0</div>
+                <div class="unit-text">คน</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="fw-semibold" style="color: #E0E0E0; font-size: 0.9rem;">กราฟเปรียบเทียบ</div>
+              <div class="small" style="color: #888; font-size: 0.75rem;" id="chart-subtitle">ข้อมูลแบบ รายวัน</div>
+            </div>
+            <canvas id="trendChart" height="220"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div id="page-export" class="container-app pt-0" style="display: none;">
+        <div class="header-box mt-2">
+          <h4 class="mb-1 fw-bold page-title" style="color: #E0E0E0;">ส่งข้อมูลรายงาน</h4>
+          <p class="small mb-0" style="color: #888;">ระบบจะดึงข้อมูลไปบันทึกลงชีต Template</p>
+        </div>
+
+        <div class="export-box">
+          <label class="form-label text-white fw-medium mb-3">เลือกวันที่ต้องการดำเนินการ</label>
+          <input type="date" id="inputExportDate" class="form-control form-control-dark mb-4 text-center mx-auto" style="max-width: 250px;">
+          <button id="btnExport" class="btn btn-warning w-100 fw-bold py-3 rounded-3" onclick="processExport()">💾 บันทึกลง Template</button>
+          
+          <div id="exportStatus" class="mt-4 fw-medium" style="font-size: 0.9rem; min-height: 1.5em;"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+  // ==========================================
+  // ส่วนที่ 1: ระบบ Authentication & SPA Navigation
+  // ==========================================
+  const scriptURL = "https://script.google.com/macros/s/AKfycbw7N9TlvlfuvHhD3uTrXRiAdIpzN7DCSUiuLUyUG8XYXP-Qc-6-lqIrDRQfsB3wkBq9/exec"; 
+
+  window.onload = () => {
+    checkAuthStatus();
+    const now = new Date();
+    const yyyy = now.getFullYear();
+    const mm = String(now.getMonth() + 1).padStart(2, '0');
+    const dd = String(now.getDate()).padStart(2, '0');
+    const today = `${yyyy}-${mm}-${dd}`;
+    
+    document.getElementById('inputDaily').value = today;
+    document.getElementById('inputExportDate').value = today;
+    document.getElementById('bd-date').value = today;
+  };
+
+  async function callAPI(action, data={}) {
+    const response = await fetch(scriptURL, {
+      method: "POST",
+      body: JSON.stringify({ action, data })
+    });
+    return await response.json();
+  }
+
+  async function processLogin() {
+    const user = document.getElementById('loginUsername').value;
+    const pass = document.getElementById('loginPassword').value;
+    const btn = document.getElementById('btnLogin');
+    const alertBox = document.getElementById('loginAlert');
+
+    if (!user || !pass) {
+      alertBox.innerText = "กรุณากรอกข้อมูลให้ครบถ้วน";
+      alertBox.style.display = 'block';
+      return;
+    }
+
+    btn.innerText = "กำลังตรวจสอบ...";
+    btn.disabled = true;
+
+    try {
+      const res = await callAPI("login", { username: user, password: pass });
+      if (res.success) {
+        localStorage.setItem('yamada_auth', JSON.stringify(res));
+        checkAuthStatus();
+      } else {
+        alertBox.innerText = res.message;
+        alertBox.style.display = 'block';
+      }
+    } catch (e) {
+      alertBox.innerText = "เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย";
+      alertBox.style.display = 'block';
+    }
+    btn.innerText = "เข้าสู่ระบบ";
+    btn.disabled = false;
+  }
+
+  function processLogout() {
+    localStorage.removeItem('yamada_auth');
+    document.getElementById('app-page').style.display = 'none';
+    document.getElementById('login-page').style.display = 'flex';
+    clearInterval(autoRefreshInterval); 
+  }
+
+  let autoRefreshInterval = null;
+
+  function checkAuthStatus() {
+    const authData = JSON.parse(localStorage.getItem('yamada_auth'));
+    if (authData && authData.success) {
+      document.getElementById('login-page').style.display = 'none';
+      document.getElementById('app-page').style.display = 'block';
+      
+      document.getElementById('displayUser').innerText = authData.name;
+      
+      if (authData.role === 'ADMIN') {
+        document.querySelectorAll('.admin-only').forEach(el => {
+          if (el.tagName === 'BUTTON' || el.tagName === 'SPAN') {
+            el.style.display = 'inline-block';
+          } else {
+            el.style.display = 'block';
+          }
+        });
+      } else {
+        document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+        isAdminMode = false;
+        document.getElementById('testModeSwitch').checked = false;
+      }
+
+      switchPage('counter'); 
+      updateDisplay();
+      refreshTable();
+      
+      if(autoRefreshInterval) clearInterval(autoRefreshInterval);
+      autoRefreshInterval = setInterval(refreshTable, 60000);
+    }
+  }
+
+  function switchPage(page) {
+    document.getElementById('page-counter').style.display = 'none';
+    document.getElementById('page-dashboard').style.display = 'none';
+    document.getElementById('page-export').style.display = 'none';
+    
+    document.getElementById('btnNavCounter').className = "btn btn-outline-warning fw-bold";
+    document.getElementById('btnNavDashboard').className = "btn btn-outline-warning fw-bold";
+    document.getElementById('btnNavExport').className = "btn btn-outline-warning fw-bold admin-only";
+
+    if (page === 'counter') {
+      document.getElementById('page-counter').style.display = 'block';
+      document.getElementById('btnNavCounter').className = "btn btn-warning fw-bold";
+      refreshTable();
+    } else if (page === 'dashboard') {
+      document.getElementById('page-dashboard').style.display = 'block';
+      document.getElementById('btnNavDashboard').className = "btn btn-warning fw-bold";
+      executeSearch();
+    } else if (page === 'export') {
+      document.getElementById('page-export').style.display = 'block';
+      document.getElementById('btnNavExport').className = "btn btn-warning fw-bold admin-only";
+    }
+  }
+
+  // ==========================================
+  // ส่วนที่ 2: โค้ดของ Yamada Counter 
+  // ==========================================
+  let isAdminMode = false;
+  let localDelta = { car: 0, person: 0 };
+  let currentConfirmed = { car: 0, person: 0 }; 
+  const timeSlots = ["11:00-12:00", "12:00-13:00", "13:00-14:00", "14:00-15:00", "15:00-16:00", "16:00-17:00", "17:00-18:00", "18:00-19:00", "19:00-20:00", "20:00-21:00", "21:00-22:00"];
+  let autoSyncTimer = null;
+
+  function getThaiDateWithBE() {
+    const d = new Date();
+    const days = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
+    const months = ["มกราคม", "กุมภาพันธ์", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"];
+    return `${days[d.getDay()]}ที่ ${d.getDate()} ${months[d.getMonth()]} พ.ศ. ${d.getFullYear() + 543}`;
+  }
+
+  function getCurrentTimeSlot() {
+    if (isAdminMode) return "โหมดทดสอบ";
+    const h = new Date().getHours();
+    return (h >= 11 && h < 22) ? `${h}:00-${h+1}:00` : "นอกเวลาทำการ";
+  }
+
+  function toggleTestMode() {
+    isAdminMode = document.getElementById('testModeSwitch').checked;
+    const slotEl = document.getElementById('current-slot');
+    if (isAdminMode) {
+      slotEl.innerText = "โหมดทดสอบ (ไม่อิงเวลา)";
+      slotEl.classList.add('badge-test');
+    } else {
+      slotEl.classList.remove('badge-test');
+    }
+    updateDisplay();
+  }
+
+  function updateDisplay() {
+    document.getElementById('current-date').innerText = getThaiDateWithBE();
+    if (!isAdminMode) document.getElementById('current-slot').innerText = getCurrentTimeSlot();
+    
+    document.getElementById('car-count').innerText = currentConfirmed.car + localDelta.car;
+    document.getElementById('person-count').innerText = currentConfirmed.person + localDelta.person;
+    
+    const saveBtn = document.getElementById('save-btn');
+    if (localDelta.car > 0 || localDelta.person > 0) {
+      saveBtn.classList.add('active-save');
+    } else {
+      saveBtn.classList.remove('active-save');
+    }
+  }
+
+  function addCount(type) {
+    const slot = getCurrentTimeSlot();
+    if (slot === "นอกเวลาทำการ") return alert("ไม่อยู่ในช่วงเวลาทำการบันทึกข้อมูล (11:00 - 22:00 น.)");
+    
+    if (type === 'car') localDelta.car++;
+    else if (type === 'person') localDelta.person++;
+    
+    updateDisplay();
+    if (autoSyncTimer) clearTimeout(autoSyncTimer);
+    autoSyncTimer = setTimeout(saveData, 5000); 
+  }
+
+  async function saveData() {
+    if (localDelta.car === 0 && localDelta.person === 0) return;
+    const slot = getCurrentTimeSlot();
+    if (slot === "นอกเวลาทำการ") return;
+
+    document.getElementById('status-msg').innerText = "กำลังบันทึกข้อมูล... ⏳";
+    document.getElementById('status-msg').style.color = "#FFD700";
+    
+    // ดึงชื่อคนที่ล็อกอินอยู่ส่งไปหลังบ้าน
+    const authData = JSON.parse(localStorage.getItem('yamada_auth'));
+    const userName = authData ? authData.name : "Unknown";
+
+    const dataToSend = { timeSlot: slot, deltaCars: localDelta.car, deltaPeople: localDelta.person, recorderName: userName };
+    localDelta = { car: 0, person: 0 }; 
+    updateDisplay(); 
+
+    try {
+      const summary = await callAPI("updateDelta", dataToSend);
+      renderTable(summary);
+      document.getElementById('status-msg').innerText = "✅ บันทึกสำเร็จ";
+      document.getElementById('status-msg').style.color = "#4CAF50";
+      setTimeout(() => document.getElementById('status-msg').innerText = "", 3000);
+    } catch (e) {
+      document.getElementById('status-msg').innerText = "❌ เกิดข้อผิดพลาดในการบันทึก";
+      document.getElementById('status-msg').style.color = '#F44336';
+    }
+  }
+
+  async function refreshTable() {
+    if (localDelta.car > 0 || localDelta.person > 0) return; 
+    try {
+      const summary = await callAPI("getSummary");
+      renderTable(summary);
+    } catch (e) { console.error("Error refreshing table"); }
+  }
+
+  function renderTable(summary) {
+    const tbody = document.getElementById('summary-body');
+    tbody.innerHTML = '';
+    let totalC = 0, totalP = 0;
+    const currentSlot = getCurrentTimeSlot();
+
+    timeSlots.forEach(slot => {
+      const rec = summary.find(r => r.timeSlot === slot);
+      const c = rec ? rec.cars : 0;
+      const p = rec ? rec.people : 0;
+      totalC += c; totalP += p;
+
+      if (slot === currentSlot && !isAdminMode) {
+        currentConfirmed.car = c;
+        currentConfirmed.person = p;
+        updateDisplay();
+      }
+
+      const isCurrent = slot === currentSlot ? 'style="background-color: rgba(255,255,255,0.05);"' : '';
+      tbody.innerHTML += `<tr ${isCurrent}>
+        <td>${slot}</td>
+        <td style="color: #2196F3 !important;">${c}</td>
+        <td style="color: #4CAF50 !important;">${p}</td>
+      </tr>`;
+    });
+
+    if (isAdminMode) {
+      const rec = summary.find(r => r.timeSlot === "โหมดทดสอบ");
+      if (rec) {
+        currentConfirmed.car = rec.cars;
+        currentConfirmed.person = rec.people;
+        totalC += rec.cars; totalP += rec.people;
+        updateDisplay();
+        tbody.innerHTML += `<tr style="background-color: rgba(244,67,54,0.1);">
+          <td>โหมดทดสอบ</td>
+          <td style="color: #2196F3 !important;">${rec.cars}</td>
+          <td style="color: #4CAF50 !important;">${rec.people}</td>
+        </tr>`;
+      }
+    }
+
+    document.getElementById('total-cars').innerText = totalC;
+    document.getElementById('total-people').innerText = totalP;
+  }
+
+  function copyDailySummary() {
+    const dateStr = getThaiDateWithBE();
+    const tCar = document.getElementById('total-cars').innerText;
+    const tPeople = document.getElementById('total-people').innerText;
+    const text = `📊 รายงาน Yamada\n📅 ประจำวันที่ ${dateStr}\n\n🚙 ยอดรถรวม: ${tCar} คัน\n👫 ยอดคนรวม: ${tPeople} คน\n\n📌 รายละเอียดเพิ่มเติมสามารถดูได้ที่ระบบแดชบอร์ด`;
+    
+    navigator.clipboard.writeText(text).then(() => {
+      alert("✅ คัดลอกรายงานเรียบร้อยแล้ว\nนำไปวางในไลน์หรือแอปอื่นๆ ได้เลยครับ");
+    });
+  }
+
+  // ==========================================
+  // 📌 ฟังก์ชันจัดการ บันทึกข้อมูลย้อนหลัง (Admin)
+  // ==========================================
+  function openBackdateModal() {
+    document.getElementById('backdateModal').classList.add('show');
+  }
+
+  function closeBackdateModal() {
+    document.getElementById('backdateModal').classList.remove('show');
+    document.getElementById('bd-car').value = 0;
+    document.getElementById('bd-people').value = 0;
+  }
+
+  async function submitBackdate() {
+    const dDate = document.getElementById('bd-date').value;
+    const dTime = document.getElementById('bd-time').value;
+    const dCar = document.getElementById('bd-car').value;
+    const dPeople = document.getElementById('bd-people').value;
+    const btn = document.getElementById('btnSubmitBackdate');
+
+    if (!dDate) return alert("กรุณาเลือกวันที่");
+    if (dCar == 0 && dPeople == 0) return alert("กรุณาระบุจำนวนรถหรือคน");
+
+    btn.innerText = "กำลังบันทึก...";
+    btn.disabled = true;
+
+    // ดึงชื่อคนที่ล็อกอินอยู่ส่งไปหลังบ้าน
+    const authData = JSON.parse(localStorage.getItem('yamada_auth'));
+    const userName = authData ? authData.name : "Unknown";
+
+    try {
+      const dataToSend = { date: dDate, timeSlot: dTime, cars: dCar, people: dPeople, recorderName: userName };
+      const res = await callAPI("addBackdate", dataToSend);
+      if (res.success) {
+        alert(res.message);
+        closeBackdateModal();
+        if (document.getElementById('page-dashboard').style.display === 'block') executeSearch();
+      } else {
+        alert("ข้อผิดพลาด: " + res.message);
+      }
+    } catch (e) {
+      alert("เชื่อมต่อล้มเหลว กรุณาลองใหม่");
+    }
+
+    btn.innerText = "บันทึกข้อมูล";
+    btn.disabled = false;
+  }
+
+  // ==========================================
+  // ส่วนที่ 3: โค้ดของ DashYamada
+  // ==========================================
+  let myChart = null;
+
+  function toggleInput() {
+    const type = document.getElementById('filterType').value;
+    document.getElementById('inputDaily').style.display = type === 'daily' ? 'block' : 'none';
+    document.getElementById('inputWeekly').style.display = type === 'weekly' ? 'block' : 'none';
+    document.getElementById('inputMonthly').style.display = type === 'monthly' ? 'block' : 'none';
+    document.getElementById('inputAll').style.display = type === 'all' ? 'block' : 'none';
+  }
+
+  function getDatesFromWeek(weekStr) {
+    const [year, week] = weekStr.split('-W');
+    const simple = new Date(year, 0, 1 + (week - 1) * 7);
+    const dow = simple.getDay();
+    const isoStart = simple;
+    if (dow <= 4) isoStart.setDate(simple.getDate() - simple.getDay() + 1);
+    else isoStart.setDate(simple.getDate() + 8 - simple.getDay());
+    const end = new Date(isoStart);
+    end.setDate(isoStart.getDate() + 6);
+    return { start: isoStart, end: end };
+  }
+
+  async function executeSearch() {
+    const type = document.getElementById('filterType').value;
+    let startDate, endDate, labelTitle;
+
+    if (type === 'daily') {
+      const val = document.getElementById('inputDaily').value;
+      if(!val) return;
+      startDate = val; endDate = val; labelTitle = "รายวัน";
+    } else if (type === 'weekly') {
+      const val = document.getElementById('inputWeekly').value;
+      if(!val) return;
+      const dates = getDatesFromWeek(val);
+      startDate = dates.start.toISOString().split('T')[0];
+      endDate = dates.end.toISOString().split('T')[0];
+      labelTitle = "รายสัปดาห์";
+    } else if (type === 'monthly') {
+      const val = document.getElementById('inputMonthly').value;
+      if(!val) return;
+      const [year, month] = val.split('-');
+      startDate = `${year}-${month}-01`;
+      const lastDay = new Date(year, month, 0).getDate();
+      endDate = `${year}-${month}-${lastDay}`;
+      labelTitle = "รายเดือน";
+    } else if (type === 'all') {
+      labelTitle = "ทั้งหมด";
+    }
+
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('dashboard-content').style.display = 'none';
+
+    try {
+      const result = await callAPI("searchData", { type, startDate, endDate });
+      
+      document.getElementById('title-car-search').innerText = `ยอดรถ (${labelTitle})`;
+      document.getElementById('title-people-search').innerText = `ยอดคน (${labelTitle})`;
+      document.getElementById('chart-subtitle').innerText = `ข้อมูลแบบ ${labelTitle}`;
+      document.getElementById('search-cars').innerText = result.searchCars.toLocaleString();
+      document.getElementById('search-people').innerText = result.searchPeople.toLocaleString();
+      document.getElementById('total-cars-system').innerText = result.totalSystemCars.toLocaleString();
+      document.getElementById('total-people-system').innerText = result.totalSystemPeople.toLocaleString();
+
+      renderChart(result.chartData);
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('dashboard-content').style.display = 'block';
+    } catch (error) {
+      document.getElementById('loading').innerText = "❌ เกิดข้อผิดพลาดในการโหลดข้อมูล";
+      document.getElementById('loading').style.color = "#F44336";
+    }
+  }
+
+  function renderChart(chartData) {
+    const ctx = document.getElementById('trendChart').getContext('2d');
+    if (myChart) myChart.destroy();
+
+    const labels = Object.keys(chartData);
+    const dataCars = labels.map(key => chartData[key].cars);
+    const dataPeople = labels.map(key => chartData[key].people);
+
+    myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          { label: 'รถ (คัน)', data: dataCars, backgroundColor: 'rgba(33, 150, 243, 0.85)', borderColor: '#2196F3', borderWidth: 1, borderRadius: 6 },
+          { label: 'คน (คน)', data: dataPeople, backgroundColor: 'rgba(76, 175, 80, 0.85)', borderColor: '#4CAF50', borderWidth: 1, borderRadius: 6 }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: true, labels: { color: '#BDBDBD', font: { family: 'Poppins' } } } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: '#2C2C2C' }, ticks: { color: '#888', font: { family: 'Poppins' } } },
+          x: { grid: { display: false }, ticks: { color: '#888', font: { family: 'Poppins' } } }
+        }
+      }
+    });
+  }
+
+  // ==========================================
+  // ส่วนที่ 4: ฟังก์ชันส่งออก Template (Admin Only)
+  // ==========================================
+  async function processExport() {
+    const dateVal = document.getElementById('inputExportDate').value;
+    const statusEl = document.getElementById('exportStatus');
+    const btn = document.getElementById('btnExport');
+
+    if (!dateVal) {
+      statusEl.innerText = "❌ กรุณาเลือกวันที่";
+      statusEl.style.color = "#F44336";
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerText = "กำลังประมวลผล...";
+    statusEl.innerText = "กำลังดึงข้อมูลและบันทึกลง Template... ⏳";
+    statusEl.style.color = "#FFD700";
+
+    try {
+      const res = await callAPI("updateTemplate", { startDate: dateVal });
+      if (res.success) {
+        statusEl.innerText = `✅ สำเร็จ! พบข้อมูล ${res.count} รายการ (วันที่ ${res.date})`;
+        statusEl.style.color = "#4CAF50";
+      } else {
+        statusEl.innerText = `❌ ข้อผิดพลาด: ${res.message}`;
+        statusEl.style.color = "#F44336";
+      }
+    } catch (e) {
+      statusEl.innerText = "❌ เกิดข้อผิดพลาดในการเชื่อมต่อเครือข่าย";
+      statusEl.style.color = "#F44336";
+    }
+    
+    btn.disabled = false;
+    btn.innerText = "💾 บันทึกลง Template";
+  }
+</script>
+</body>
+</html>
