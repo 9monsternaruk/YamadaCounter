@@ -207,7 +207,6 @@
 </head>
 <body>
 
-  <!-- Modal Admin Backdate -->
   <div class="modal-overlay" id="backdateModal">
     <div class="modal-content-muji">
       <h6 class="fw-bold mb-3 text-center">บันทึกข้อมูลย้อนหลัง</h6>
@@ -248,7 +247,6 @@
     </div>
   </div>
 
-  <!-- Login Page -->
   <div id="login-page">
     <div class="login-box text-center">
       <h4 class="mb-4">Yamada</h4>
@@ -259,7 +257,6 @@
     </div>
   </div>
 
-  <!-- Main App -->
   <div id="app-page" style="display: none;">
     
     <div class="top-header">
@@ -268,6 +265,8 @@
         <span id="current-slot" class="header-slot">โหลดข้อมูล...</span>
       </div>
       <div class="d-flex align-items-center gap-2">
+        <span id="header-date" style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;"></span>
+        
         <div class="admin-only" style="display: none;">
           <input class="form-check-input" type="checkbox" id="testModeSwitch" onchange="toggleTestMode()" style="transform: scale(0.8);">
         </div>
@@ -275,14 +274,12 @@
       </div>
     </div>
 
-    <!-- Page: Counter -->
     <div id="page-counter" class="container-app">
-      <div class="text-center mb-2">
-        <p id="current-date" class="small text-muted mb-0"></p>
+      <div class="text-center mb-2 mt-2">
+        <h5 class="fw-bold mb-0" style="color: var(--text-main); letter-spacing: 2px;">YAMADA</h5>
       </div>
 
       <div class="split-container">
-        <!-- ยอดรถ -->
         <div class="split-pane split-car" onclick="addCount('car')">
           <div class="pane-title">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.08 3.11H5.77L6.85 7zM7.5 16c-.83 0-1.5-.67-1.5-1.5S6.67 13 7.5 13s1.5.67 1.5 1.5S8.33 16 7.5 16zm9 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
@@ -292,7 +289,6 @@
           <div class="tap-text">TAP TO ADD</div>
         </div>
         
-        <!-- ยอดคน -->
         <div class="split-pane split-people" onclick="addCount('person')">
           <div class="pane-title">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
@@ -334,7 +330,6 @@
       </div>
     </div>
 
-    <!-- Page: Dashboard -->
     <div id="page-dashboard" class="container-app" style="display: none;">
       <h5 class="dashboard-header">รายงานสรุปผล</h5>
       
@@ -400,7 +395,6 @@
       </div>
     </div>
 
-    <!-- Page: Export -->
     <div id="page-export" class="container-app" style="display: none;">
       <h5 class="dashboard-header mt-2">ส่งข้อมูลรายงาน</h5>
       <p class="small text-muted">ระบบจะดึงข้อมูลไปบันทึกลงชีต Template</p>
@@ -413,7 +407,6 @@
       </div>
     </div>
 
-    <!-- Bottom Navigation -->
     <div class="bottom-nav">
       <div class="nav-item active" id="nav-counter" onclick="window.location.href='https://9monsternaruk.github.io/EV_Noodles/'">
         <div class="nav-icon">🏠</div>
@@ -567,6 +560,12 @@
     return `${days[d.getDay()]}ที่ ${d.getDate()} ${months[d.getMonth()]} พ.ศ. ${d.getFullYear() + 543}`;
   }
 
+  function getShortThaiDate() {
+    const d = new Date();
+    const months = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+    return `${d.getDate()} ${months[d.getMonth()]} ${(d.getFullYear() + 543).toString().slice(-2)}`;
+  }
+
   function getCurrentTimeSlot() {
     if (isAdminMode) return "โหมดทดสอบ";
     const h = new Date().getHours();
@@ -586,7 +585,7 @@
   }
 
   function updateDisplay() {
-    document.getElementById('current-date').innerText = getThaiDateWithBE();
+    document.getElementById('header-date').innerText = getShortThaiDate();
     if (!isAdminMode) document.getElementById('current-slot').innerText = getCurrentTimeSlot();
     
     document.getElementById('car-count').innerText = currentConfirmed.car + localDelta.car;
